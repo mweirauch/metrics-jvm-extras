@@ -24,7 +24,7 @@
 
     <groupId>io.github.mweirauch</groupId>
     <artifactId>metrics-jvm-extras</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>A set of additional metrics complementing Dropwizards metrics-jvm.</description>
     <inceptionYear>2016</inceptionYear>
