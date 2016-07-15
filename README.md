@@ -2,6 +2,9 @@
 
 A set of additional metrics complementing Dropwizards [metrics-jvm](https://github.com/dropwizard/metrics/tree/3.2-development/metrics-jvm).
 
+[![Apache License 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/mweirauch/metrics-jvm-extras/master/LICENSE.txt)
+[![Travis CI](https://img.shields.io/travis/mweirauch/metrics-jvm-extras.svg?maxAge=2592000)](https://travis-ci.org/mweirauch/metrics-jvm-extras)
+
 ## Motivation
 
 * get "real" memory usage of the JVM beyond its managed parts
