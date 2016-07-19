@@ -28,27 +28,6 @@ import java.util.Objects;
 
 class ProcfsReader {
 
-    static class ReadResult {
-
-        private final List<String> lines;
-
-        private final boolean updated;
-
-        ReadResult(List<String> lines, boolean updated) {
-            this.lines = Objects.requireNonNull(lines);
-            this.updated = updated;
-        }
-
-        public boolean isUpdated() {
-            return updated;
-        }
-
-        public List<String> getLines() {
-            return lines;
-        }
-
-    }
-
     private static final Map<String, ProcfsReader> instances = new HashMap<>();
 
     private static final Object instancesLock = new Object();
@@ -143,6 +122,27 @@ class ProcfsReader {
             }
             return reader;
         }
+    }
+
+    static class ReadResult {
+
+        private final List<String> lines;
+
+        private final boolean updated;
+
+        private ReadResult(List<String> lines, boolean updated) {
+            this.lines = Objects.requireNonNull(lines);
+            this.updated = updated;
+        }
+
+        public boolean isUpdated() {
+            return updated;
+        }
+
+        public List<String> getLines() {
+            return lines;
+        }
+
     }
 
 }

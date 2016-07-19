@@ -34,19 +34,6 @@ import com.google.common.testing.NullPointerTester.Visibility;
 
 public class ProcfsEntryUnit0Test {
 
-    private static class TestProcfsEntry extends ProcfsEntry {
-
-        protected TestProcfsEntry(ProcfsReader reader) {
-            super(reader);
-        }
-
-        @Override
-        protected void handle(Collection<String> lines) {
-            Objects.requireNonNull(lines);
-        }
-
-    }
-
     private final ProcfsReader reader = mock(ProcfsReader.class);
 
     private final ProcfsEntry uut = new TestProcfsEntry(reader);
@@ -90,6 +77,19 @@ public class ProcfsEntryUnit0Test {
         verify(reader).read();
         verify(readResult).isUpdated();
         verify(spy, never()).handle(lines);
+    }
+
+    private static class TestProcfsEntry extends ProcfsEntry {
+
+        protected TestProcfsEntry(ProcfsReader reader) {
+            super(reader);
+        }
+
+        @Override
+        protected void handle(Collection<String> lines) {
+            Objects.requireNonNull(lines);
+        }
+
     }
 
 }
