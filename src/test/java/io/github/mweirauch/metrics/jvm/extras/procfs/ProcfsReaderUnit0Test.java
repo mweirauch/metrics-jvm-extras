@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -128,12 +130,12 @@ public class ProcfsReaderUnit0Test {
         final ProcfsReader instance1 = ProcfsReader.getInstance("foo");
         final ProcfsReader instance2 = ProcfsReader.getInstance("foo");
 
-        assertTrue(instance1 == instance2);
+        assertSame(instance1, instance2);
 
         final ProcfsReader instance3 = ProcfsReader.getInstance("bar");
 
-        assertFalse(instance3 == instance1);
-        assertFalse(instance3 == instance2);
+        assertNotSame(instance3, instance1);
+        assertNotSame(instance3, instance2);
     }
 
 }
