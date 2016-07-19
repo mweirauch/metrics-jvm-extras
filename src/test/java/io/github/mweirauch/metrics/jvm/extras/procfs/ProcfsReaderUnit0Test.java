@@ -60,8 +60,6 @@ public class ProcfsReaderUnit0Test {
         npt.testConstructors(uut.getClass(), Visibility.PACKAGE);
         npt.testStaticMethods(uut.getClass(), Visibility.PACKAGE);
         npt.testInstanceMethods(uut, Visibility.PACKAGE);
-
-        assertTrue(true);
     }
 
     @Test(expected = RuntimeException.class)
