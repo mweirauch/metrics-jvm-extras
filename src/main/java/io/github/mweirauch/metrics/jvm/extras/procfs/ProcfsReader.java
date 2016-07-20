@@ -38,7 +38,7 @@ class ProcfsReader {
 
     private static final Path BASE = Paths.get("/proc", "self");
 
-    // @VisibleForTesting
+    /* default */
     static final long CACHE_DURATION_MS = 100;
 
     private final Path entryPath;
