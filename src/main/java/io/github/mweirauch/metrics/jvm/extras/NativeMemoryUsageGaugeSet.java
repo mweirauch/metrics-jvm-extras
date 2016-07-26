@@ -15,9 +15,6 @@
  */
 package io.github.mweirauch.metrics.jvm.extras;
 
-import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps;
-import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps.KEY;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +24,9 @@ import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricSet;
 
+import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps;
+import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps.KEY;
+
 public class NativeMemoryUsageGaugeSet implements MetricSet {
 
     private final ProcfsSmaps smaps;
@@ -35,8 +35,7 @@ public class NativeMemoryUsageGaugeSet implements MetricSet {
         this.smaps = new ProcfsSmaps();
     }
 
-    // @VisibleForTesting
-    NativeMemoryUsageGaugeSet(ProcfsSmaps smaps) {
+    /* default */ NativeMemoryUsageGaugeSet(ProcfsSmaps smaps) {
         this.smaps = Objects.requireNonNull(smaps);
     }
 

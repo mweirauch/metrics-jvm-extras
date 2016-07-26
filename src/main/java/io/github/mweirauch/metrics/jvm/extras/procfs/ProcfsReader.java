@@ -38,22 +38,19 @@ class ProcfsReader {
 
     private static final Path BASE = Paths.get("/proc", "self");
 
-    /* default */
-    static final long CACHE_DURATION_MS = 100;
+    /* default */ static final long CACHE_DURATION_MS = 100;
+
+    /* default */ long lastReadTime = -1;
 
     private final Path entryPath;
 
     private final boolean osSupport;
 
-    // @VisibleForTesting
-    long lastReadTime = -1;
-
     private ProcfsReader(String entry) {
         this(BASE, entry, false);
     }
 
-    // @VisibleForTesting
-    ProcfsReader(Path base, String entry) {
+    /* default */ ProcfsReader(Path base, String entry) {
         this(base, entry, true);
     }
 
@@ -67,12 +64,11 @@ class ProcfsReader {
                 || System.getProperty("os.name").toLowerCase(Locale.ENGLISH).startsWith("linux");
     }
 
-    ReadResult read() {
+    /* default */ ReadResult read() {
         return read(System.currentTimeMillis());
     }
 
-    // @VisibleForTesting
-    ReadResult read(long currentTimeMillis) {
+    /* default */ ReadResult read(long currentTimeMillis) {
         try {
             synchronized (dataLock) {
                 final Path key = entryPath.getFileName();
@@ -93,8 +89,7 @@ class ProcfsReader {
         }
     }
 
-    // @VisibleForTesting
-    List<String> readPath(Path entryPath) throws IOException {
+    /* default */ List<String> readPath(Path entryPath) throws IOException {
         Objects.requireNonNull(entryPath);
 
         if (!osSupport) {
@@ -103,15 +98,14 @@ class ProcfsReader {
         return Files.readAllLines(entryPath);
     }
 
-    // @VisibleForTesting
-    void cacheResult(Path key, List<String> lines) {
+    /* default */ void cacheResult(Path key, List<String> lines) {
         Objects.requireNonNull(key);
         Objects.requireNonNull(lines);
 
         data.put(key, lines);
     }
 
-    static ProcfsReader getInstance(String entry) {
+    /* default */ static ProcfsReader getInstance(String entry) {
         Objects.requireNonNull(entry);
 
         synchronized (instancesLock) {
@@ -124,7 +118,7 @@ class ProcfsReader {
         }
     }
 
-    static class ReadResult {
+    /* default */ static class ReadResult {
 
         private final List<String> lines;
 

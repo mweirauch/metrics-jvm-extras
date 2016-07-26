@@ -56,8 +56,7 @@ public class ProcfsSmaps extends ProcfsEntry {
         super(ProcfsReader.getInstance("smaps"));
     }
 
-    // @VisibleForTesting
-    ProcfsSmaps(ProcfsReader reader) {
+    /* default */ ProcfsSmaps(ProcfsReader reader) {
         super(reader);
     }
 
