@@ -29,7 +29,6 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsReader.ReadResult;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -41,6 +40,8 @@ import org.junit.Test;
 
 import com.google.common.testing.NullPointerTester;
 import com.google.common.testing.NullPointerTester.Visibility;
+
+import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsReader.ReadResult;
 
 public class ProcfsReaderUnit0Test {
 
