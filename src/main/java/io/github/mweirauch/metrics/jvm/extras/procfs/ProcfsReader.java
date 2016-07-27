@@ -124,7 +124,7 @@ class ProcfsReader {
 
         private final boolean updated;
 
-        private ReadResult(List<String> lines, boolean updated) {
+        /* default */ ReadResult(List<String> lines, boolean updated) {
             this.lines = Objects.requireNonNull(lines);
             this.updated = updated;
         }
