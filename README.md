@@ -4,6 +4,7 @@ A set of additional metrics complementing Dropwizards [metrics-jvm](https://gith
 
 [![Apache License 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/mweirauch/metrics-jvm-extras/master/LICENSE.txt)
 [![Travis CI](https://img.shields.io/travis/mweirauch/metrics-jvm-extras.svg?maxAge=2592000)](https://travis-ci.org/mweirauch/metrics-jvm-extras)
+[![Codacy grade](https://img.shields.io/codacy/grade/3ace40206b314f72a690a00be45c9a5a.svg?maxAge=2592000)](https://www.codacy.com/app/mweirauch/metrics-jvm-extras)
 
 ## Motivation
 
