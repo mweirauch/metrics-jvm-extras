@@ -120,7 +120,7 @@
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
                 <configuration>
-                    <header>src/build/license-header.txt</header>
+                    <header>src/build/resources/license-header.txt</header>
                     <properties>
                         <owner>Michael Weirauch</owner>
                         <email>michael.weirauch@gmail.com</email>
