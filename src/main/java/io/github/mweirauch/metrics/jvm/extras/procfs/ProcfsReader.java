@@ -28,27 +28,6 @@ import java.util.Objects;
 
 class ProcfsReader {
 
-    static class ReadResult {
-
-        private final List<String> lines;
-
-        private final boolean updated;
-
-        ReadResult(List<String> lines, boolean updated) {
-            this.lines = Objects.requireNonNull(lines);
-            this.updated = updated;
-        }
-
-        public boolean isUpdated() {
-            return updated;
-        }
-
-        public List<String> getLines() {
-            return lines;
-        }
-
-    }
-
     private static final Map<String, ProcfsReader> instances = new HashMap<>();
 
     private static final Object instancesLock = new Object();
@@ -59,22 +38,19 @@ class ProcfsReader {
 
     private static final Path BASE = Paths.get("/proc", "self");
 
-    // @VisibleForTesting
-    static final long CACHE_DURATION_MS = 100;
+    /* default */ static final long CACHE_DURATION_MS = 100;
+
+    /* default */ long lastReadTime = -1;
 
     private final Path entryPath;
 
     private final boolean osSupport;
 
-    // @VisibleForTesting
-    long lastReadTime = -1;
-
     private ProcfsReader(String entry) {
         this(BASE, entry, false);
     }
 
-    // @VisibleForTesting
-    ProcfsReader(Path base, String entry) {
+    /* default */ ProcfsReader(Path base, String entry) {
         this(base, entry, true);
     }
 
@@ -88,34 +64,32 @@ class ProcfsReader {
                 || System.getProperty("os.name").toLowerCase(Locale.ENGLISH).startsWith("linux");
     }
 
-    ReadResult read() {
+    /* default */ Path getEntryPath() {
+        return entryPath;
+    }
+
+    /* default */ ReadResult read() throws IOException {
         return read(System.currentTimeMillis());
     }
 
-    // @VisibleForTesting
-    ReadResult read(long currentTimeMillis) {
-        try {
-            synchronized (dataLock) {
-                final Path key = entryPath.getFileName();
+    /* default */ ReadResult read(long currentTimeMillis) throws IOException {
+        synchronized (dataLock) {
+            final Path key = getEntryPath().getFileName();
 
-                final ReadResult readResult;
-                if (lastReadTime == -1 || lastReadTime + CACHE_DURATION_MS < currentTimeMillis) {
-                    final List<String> lines = readPath(entryPath);
-                    cacheResult(key, lines);
-                    lastReadTime = System.currentTimeMillis();
-                    readResult = new ReadResult(lines, true);
-                } else {
-                    readResult = new ReadResult(data.get(key), false);
-                }
-                return readResult;
+            final ReadResult readResult;
+            if (lastReadTime == -1 || lastReadTime + CACHE_DURATION_MS < currentTimeMillis) {
+                final List<String> lines = readPath(entryPath);
+                cacheResult(key, lines);
+                lastReadTime = System.currentTimeMillis();
+                readResult = new ReadResult(lines, true);
+            } else {
+                readResult = new ReadResult(data.get(key), false);
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed reading '" + entryPath + "'", e);
+            return readResult;
         }
     }
 
-    // @VisibleForTesting
-    List<String> readPath(Path entryPath) throws IOException {
+    /* default */ List<String> readPath(Path entryPath) throws IOException {
         Objects.requireNonNull(entryPath);
 
         if (!osSupport) {
@@ -124,15 +98,14 @@ class ProcfsReader {
         return Files.readAllLines(entryPath);
     }
 
-    // @VisibleForTesting
-    void cacheResult(Path key, List<String> lines) {
+    /* default */ void cacheResult(Path key, List<String> lines) {
         Objects.requireNonNull(key);
         Objects.requireNonNull(lines);
 
         data.put(key, lines);
     }
 
-    static ProcfsReader getInstance(String entry) {
+    /* default */ static ProcfsReader getInstance(String entry) {
         Objects.requireNonNull(entry);
 
         synchronized (instancesLock) {
@@ -143,6 +116,27 @@ class ProcfsReader {
             }
             return reader;
         }
+    }
+
+    /* default */ static class ReadResult {
+
+        private final List<String> lines;
+
+        private final boolean updated;
+
+        /* default */ ReadResult(List<String> lines, boolean updated) {
+            this.lines = Objects.requireNonNull(lines);
+            this.updated = updated;
+        }
+
+        public boolean isUpdated() {
+            return updated;
+        }
+
+        public List<String> getLines() {
+            return lines;
+        }
+
     }
 
 }

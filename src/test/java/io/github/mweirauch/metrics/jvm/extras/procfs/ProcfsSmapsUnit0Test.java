@@ -17,8 +17,9 @@ package io.github.mweirauch.metrics.jvm.extras.procfs;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps.KEY;
+import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +29,8 @@ import org.junit.Test;
 
 import com.google.common.testing.NullPointerTester;
 import com.google.common.testing.NullPointerTester.Visibility;
+
+import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps.KEY;
 
 public class ProcfsSmapsUnit0Test {
 
@@ -74,6 +77,20 @@ public class ProcfsSmapsUnit0Test {
         assertEquals(Long.valueOf(20059136), uut.get(KEY.PSS));
         assertEquals(Long.valueOf(0), uut.get(KEY.SWAP));
         assertEquals(Long.valueOf(0), uut.get(KEY.SWAPPSS));
+    }
+
+    @Test
+    public void testReturnDefaultValuesOnReaderFailure() throws IOException {
+        final ProcfsReader reader = mock(ProcfsReader.class);
+        when(reader.read()).thenThrow(new IOException("THROW"));
+
+        final ProcfsSmaps uut = new ProcfsSmaps(reader);
+
+        assertEquals(Long.valueOf(-1), uut.get(KEY.VSS));
+        assertEquals(Long.valueOf(-1), uut.get(KEY.RSS));
+        assertEquals(Long.valueOf(-1), uut.get(KEY.PSS));
+        assertEquals(Long.valueOf(-1), uut.get(KEY.SWAP));
+        assertEquals(Long.valueOf(-1), uut.get(KEY.SWAPPSS));
     }
 
 }

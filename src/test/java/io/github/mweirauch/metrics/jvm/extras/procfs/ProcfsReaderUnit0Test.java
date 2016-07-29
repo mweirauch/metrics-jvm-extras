@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -27,7 +29,6 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsReader.ReadResult;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -39,6 +40,8 @@ import org.junit.Test;
 
 import com.google.common.testing.NullPointerTester;
 import com.google.common.testing.NullPointerTester.Visibility;
+
+import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsReader.ReadResult;
 
 public class ProcfsReaderUnit0Test {
 
@@ -60,13 +63,14 @@ public class ProcfsReaderUnit0Test {
         npt.testInstanceMethods(uut, Visibility.PACKAGE);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = IOException.class)
     public void testReadProcSelfNonExistant() throws Exception {
         final ProcfsReader uut = mock(ProcfsReader.class);
 
-        when(uut.readPath(any())).thenThrow(new IOException("THROW"));
+        when(uut.getEntryPath()).thenReturn(Paths.get("stub"));
         when(uut.read()).thenCallRealMethod();
         when(uut.read(anyLong())).thenCallRealMethod();
+        when(uut.readPath(any())).thenThrow(new IOException("THROW"));
 
         uut.read();
     }
@@ -128,12 +132,12 @@ public class ProcfsReaderUnit0Test {
         final ProcfsReader instance1 = ProcfsReader.getInstance("foo");
         final ProcfsReader instance2 = ProcfsReader.getInstance("foo");
 
-        assertTrue(instance1 == instance2);
+        assertSame(instance1, instance2);
 
         final ProcfsReader instance3 = ProcfsReader.getInstance("bar");
 
-        assertFalse(instance3 == instance1);
-        assertFalse(instance3 == instance2);
+        assertNotSame(instance3, instance1);
+        assertNotSame(instance3, instance2);
     }
 
 }

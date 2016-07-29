@@ -48,7 +48,7 @@ public class ProcfsSmaps extends ProcfsEntry {
         SWAPPSS
     }
 
-    private static final int KB = 1024;
+    private static final int KILOBYTE = 1024;
 
     private final Map<KEY, AtomicLong> values = new HashMap<>();
 
@@ -56,28 +56,30 @@ public class ProcfsSmaps extends ProcfsEntry {
         super(ProcfsReader.getInstance("smaps"));
     }
 
-    // @VisibleForTesting
-    ProcfsSmaps(ProcfsReader reader) {
+    /* default */ ProcfsSmaps(ProcfsReader reader) {
         super(reader);
+    }
+
+    @Override
+    protected void reset() {
+        EnumSet.allOf(KEY.class).forEach(key -> values.put(key, new AtomicLong(-1)));
     }
 
     @Override
     protected void handle(Collection<String> lines) {
         Objects.requireNonNull(lines);
 
-        EnumSet.allOf(KEY.class).forEach(e -> values.put(e, new AtomicLong(-1)));
-
-        for (String l : lines) {
-            if (l.startsWith("Size:")) {
-                inc(KEY.VSS, parseKiloBytes(l) * KB);
-            } else if (l.startsWith("Rss:")) {
-                inc(KEY.RSS, parseKiloBytes(l) * KB);
-            } else if (l.startsWith("Pss:")) {
-                inc(KEY.PSS, parseKiloBytes(l) * KB);
-            } else if (l.startsWith("Swap:")) {
-                inc(KEY.SWAP, parseKiloBytes(l) * KB);
-            } else if (l.startsWith("SwapPss:")) {
-                inc(KEY.SWAPPSS, parseKiloBytes(l) * KB);
+        for (final String line : lines) {
+            if (line.startsWith("Size:")) {
+                inc(KEY.VSS, parseKiloBytes(line) * KILOBYTE);
+            } else if (line.startsWith("Rss:")) {
+                inc(KEY.RSS, parseKiloBytes(line) * KILOBYTE);
+            } else if (line.startsWith("Pss:")) {
+                inc(KEY.PSS, parseKiloBytes(line) * KILOBYTE);
+            } else if (line.startsWith("Swap:")) {
+                inc(KEY.SWAP, parseKiloBytes(line) * KILOBYTE);
+            } else if (line.startsWith("SwapPss:")) {
+                inc(KEY.SWAPPSS, parseKiloBytes(line) * KILOBYTE);
             }
         }
     }
