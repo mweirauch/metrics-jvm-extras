@@ -64,28 +64,28 @@ class ProcfsReader {
                 || System.getProperty("os.name").toLowerCase(Locale.ENGLISH).startsWith("linux");
     }
 
-    /* default */ ReadResult read() {
+    /* default */ Path getEntryPath() {
+        return entryPath;
+    }
+
+    /* default */ ReadResult read() throws IOException {
         return read(System.currentTimeMillis());
     }
 
-    /* default */ ReadResult read(long currentTimeMillis) {
-        try {
-            synchronized (dataLock) {
-                final Path key = entryPath.getFileName();
+    /* default */ ReadResult read(long currentTimeMillis) throws IOException {
+        synchronized (dataLock) {
+            final Path key = getEntryPath().getFileName();
 
-                final ReadResult readResult;
-                if (lastReadTime == -1 || lastReadTime + CACHE_DURATION_MS < currentTimeMillis) {
-                    final List<String> lines = readPath(entryPath);
-                    cacheResult(key, lines);
-                    lastReadTime = System.currentTimeMillis();
-                    readResult = new ReadResult(lines, true);
-                } else {
-                    readResult = new ReadResult(data.get(key), false);
-                }
-                return readResult;
+            final ReadResult readResult;
+            if (lastReadTime == -1 || lastReadTime + CACHE_DURATION_MS < currentTimeMillis) {
+                final List<String> lines = readPath(entryPath);
+                cacheResult(key, lines);
+                lastReadTime = System.currentTimeMillis();
+                readResult = new ReadResult(lines, true);
+            } else {
+                readResult = new ReadResult(data.get(key), false);
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed reading '" + entryPath + "'", e);
+            return readResult;
         }
     }
 

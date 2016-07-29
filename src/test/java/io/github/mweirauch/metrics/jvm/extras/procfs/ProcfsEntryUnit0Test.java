@@ -19,7 +19,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsReader.ReadResult;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,6 +30,8 @@ import org.mockito.Mockito;
 
 import com.google.common.testing.NullPointerTester;
 import com.google.common.testing.NullPointerTester.Visibility;
+
+import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsReader.ReadResult;
 
 public class ProcfsEntryUnit0Test {
 
@@ -83,6 +84,11 @@ public class ProcfsEntryUnit0Test {
 
         protected TestProcfsEntry(ProcfsReader reader) {
             super(reader);
+        }
+
+        @Override
+        protected void reset() {
+            //
         }
 
         @Override

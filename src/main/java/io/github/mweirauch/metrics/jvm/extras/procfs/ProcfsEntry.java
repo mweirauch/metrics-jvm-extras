@@ -15,12 +15,18 @@
  */
 package io.github.mweirauch.metrics.jvm.extras.procfs;
 
-import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsReader.ReadResult;
-
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsReader.ReadResult;
+
 abstract class ProcfsEntry {
+
+    private static final Logger log = LoggerFactory.getLogger(ProcfsEntry.class);
 
     private final Object lock = new Object();
 
@@ -32,12 +38,20 @@ abstract class ProcfsEntry {
 
     protected final void collect() {
         synchronized (lock) {
-            final ReadResult result = reader.read();
-            if (result.isUpdated()) {
-                handle(result.getLines());
+            try {
+                final ReadResult result = reader.read();
+                if (result != null && result.isUpdated()) {
+                    reset();
+                    handle(result.getLines());
+                }
+            } catch (IOException e) {
+                reset();
+                log.warn("Failed reading '" + reader.getEntryPath() + "'!", e);
             }
         }
     }
+
+    protected abstract void reset();
 
     protected abstract void handle(Collection<String> lines);
 

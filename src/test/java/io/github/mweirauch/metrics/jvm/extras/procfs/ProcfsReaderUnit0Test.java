@@ -63,13 +63,14 @@ public class ProcfsReaderUnit0Test {
         npt.testInstanceMethods(uut, Visibility.PACKAGE);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = IOException.class)
     public void testReadProcSelfNonExistant() throws Exception {
         final ProcfsReader uut = mock(ProcfsReader.class);
 
-        when(uut.readPath(any())).thenThrow(new IOException("THROW"));
+        when(uut.getEntryPath()).thenReturn(Paths.get("stub"));
         when(uut.read()).thenCallRealMethod();
         when(uut.read(anyLong())).thenCallRealMethod();
+        when(uut.readPath(any())).thenThrow(new IOException("THROW"));
 
         uut.read();
     }

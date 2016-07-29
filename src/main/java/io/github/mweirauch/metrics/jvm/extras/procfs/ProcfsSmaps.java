@@ -61,10 +61,13 @@ public class ProcfsSmaps extends ProcfsEntry {
     }
 
     @Override
+    protected void reset() {
+        EnumSet.allOf(KEY.class).forEach(key -> values.put(key, new AtomicLong(-1)));
+    }
+
+    @Override
     protected void handle(Collection<String> lines) {
         Objects.requireNonNull(lines);
-
-        EnumSet.allOf(KEY.class).forEach(key -> values.put(key, new AtomicLong(-1)));
 
         for (final String line : lines) {
             if (line.startsWith("Size:")) {
