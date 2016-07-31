@@ -5,6 +5,7 @@ A set of additional metrics complementing Dropwizards [metrics-jvm](https://gith
 [![Apache License 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/mweirauch/metrics-jvm-extras/master/LICENSE.txt)
 [![Travis CI](https://img.shields.io/travis/mweirauch/metrics-jvm-extras.svg?maxAge=2592000)](https://travis-ci.org/mweirauch/metrics-jvm-extras)
 [![Codacy grade](https://img.shields.io/codacy/grade/3ace40206b314f72a690a00be45c9a5a.svg?maxAge=2592000)](https://www.codacy.com/app/mweirauch/metrics-jvm-extras)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.mweirauch/metrics-jvm-extras.svg?maxAge=2592000)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.mweirauch%22%20AND%20a%3A%22metrics-jvm-extras%22)
 
 ## Motivation
 
@@ -14,7 +15,13 @@ A set of additional metrics complementing Dropwizards [metrics-jvm](https://gith
 
 ## Usage
 
-There's no publicaly available artifacts, yet. Stay tuned.
+```xml
+<dependency>
+    <groupId>io.github.mweirauch</groupId>
+    <artifactId>metrics-jvm-extras</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
 
 ```java
 metrics.register("jvm.native", new NativeMemoryUsageGaugeSet());
@@ -41,3 +48,8 @@ The `NativeMemoryUsageGaugeSet` reads values from `/proc/self/smaps`.
 * procfs data is cached for `100ms` in order to relief the filesystem pressure
   when `Metric`s based on this data are queried by the registry one after
   another on collection run.
+
+## What could be next?
+* CPU usage details
+* file descriptor usage (not just the known ratio gauge)
+* JVM Native Memory Tracking details
