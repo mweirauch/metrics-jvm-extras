@@ -25,6 +25,7 @@ A set of additional metrics complementing Dropwizards [metrics-jvm](https://gith
 
 ```java
 metrics.register("jvm.native", new NativeMemoryUsageGaugeSet());
+metrics.register("jvm.fds.count", new FileDescriptorCountGauge());
 ```
 
 ## Available Metrics
@@ -51,5 +52,4 @@ The `NativeMemoryUsageGaugeSet` reads values from `/proc/self/smaps`.
 
 ## What could be next?
 * CPU usage details
-* file descriptor usage (not just the known ratio gauge)
 * JVM Native Memory Tracking details
