@@ -45,6 +45,10 @@ The `NativeMemoryUsageGaugeSet` reads values from `/proc/self/smaps`.
   shared memory among processes. Since Linux 4.3. Will return `-1` if your
   kernel is older. As with `pss`, the most accurate metric to watch.
 
+### FileDescriptorCountGauge
+
+Provides the count of open file descriptors in use by the JVM process.
+
 ## Notes
 * procfs data is cached for `100ms` in order to relief the filesystem pressure
   when `Metric`s based on this data are queried by the registry one after
