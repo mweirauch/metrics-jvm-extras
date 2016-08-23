@@ -26,6 +26,7 @@ A set of additional metrics complementing Dropwizards [metrics-jvm](https://gith
 ```java
 metrics.register("jvm.native", new NativeMemoryUsageGaugeSet());
 metrics.register("jvm.fds.count", new FileDescriptorCountGauge());
+metrics.register("jvm.uptime", new UptimeGauge());
 ```
 
 ## Available Metrics
@@ -48,6 +49,10 @@ The `NativeMemoryUsageGaugeSet` reads values from `/proc/self/smaps`.
 ### FileDescriptorCountGauge
 
 Provides the count of open file descriptors in use by the JVM process.
+
+### UptimeGauge
+
+Provides uptime in `ms`.
 
 ## Notes
 * procfs data is cached for `100ms` in order to relief the filesystem pressure
