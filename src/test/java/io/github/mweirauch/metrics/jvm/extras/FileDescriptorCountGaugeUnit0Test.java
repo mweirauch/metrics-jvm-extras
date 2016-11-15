@@ -69,14 +69,14 @@ public class FileDescriptorCountGaugeUnit0Test {
         @SuppressWarnings("unused")
         public long getOpenFileDescriptorCount() {
             return 512L;
-        };
+        }
 
         @SuppressWarnings("unused")
         public long getMaxFileDescriptorCount() {
             return 1024L;
-        };
+        }
 
-    };
+    }
 
     @Test
     public void testNullContract() {
