@@ -52,6 +52,7 @@ public class ProcfsSmapsUnit0Test {
         npt.testInstanceMethods(uut, Visibility.PACKAGE);
     }
 
+    @SuppressWarnings("unused")
     @Test
     public void testInstantiation() {
         new ProcfsSmaps();

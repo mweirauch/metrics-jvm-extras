@@ -20,8 +20,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps;
-import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps.KEY;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -32,6 +30,9 @@ import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Metric;
 import com.google.common.testing.NullPointerTester;
 import com.google.common.testing.NullPointerTester.Visibility;
+
+import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps;
+import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps.KEY;
 
 public class NativeMemoryUsageGaugeSetUnit0Test {
 
@@ -48,6 +49,7 @@ public class NativeMemoryUsageGaugeSetUnit0Test {
         npt.testInstanceMethods(uut, Visibility.PACKAGE);
     }
 
+    @SuppressWarnings("unused")
     @Test
     public void testInstantiation() {
         new NativeMemoryUsageGaugeSet();
@@ -68,8 +70,8 @@ public class NativeMemoryUsageGaugeSetUnit0Test {
 
         assertNotNull(metrics);
         assertEquals(5, metrics.keySet().size());
-        assertTrue(metrics.keySet().containsAll(
-                Arrays.asList("vss", "rss", "pss", "swap", "swappss")));
+        assertTrue(metrics.keySet()
+                .containsAll(Arrays.asList("vss", "rss", "pss", "swap", "swappss")));
 
         assertEquals(1L, ((Gauge) metrics.get("vss")).getValue());
         assertEquals(2L, ((Gauge) metrics.get("rss")).getValue());

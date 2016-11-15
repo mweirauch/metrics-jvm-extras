@@ -44,6 +44,7 @@ public class UptimeGaugeUnit0Test {
         npt.testInstanceMethods(uut, Visibility.PACKAGE);
     }
 
+    @SuppressWarnings("unused")
     @Test
     public void testInstantiation() {
         new UptimeGauge();
