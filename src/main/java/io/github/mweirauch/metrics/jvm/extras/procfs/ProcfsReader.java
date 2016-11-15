@@ -89,13 +89,13 @@ class ProcfsReader {
         }
     }
 
-    /* default */ List<String> readPath(Path entryPath) throws IOException {
-        Objects.requireNonNull(entryPath);
+    /* default */ List<String> readPath(Path path) throws IOException {
+        Objects.requireNonNull(path);
 
         if (!osSupport) {
             return Collections.emptyList();
         }
-        return Files.readAllLines(entryPath);
+        return Files.readAllLines(path);
     }
 
     /* default */ void cacheResult(Path key, List<String> lines) {
