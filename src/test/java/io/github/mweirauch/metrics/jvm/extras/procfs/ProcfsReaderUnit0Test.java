@@ -16,15 +16,11 @@
 package io.github.mweirauch.metrics.jvm.extras.procfs;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -65,10 +61,7 @@ public class ProcfsReaderUnit0Test {
 
     @Test(expected = IOException.class)
     public void testReadProcSelfNonExistant() throws Exception {
-        final ProcfsReader uut = mock(ProcfsReader.class);
-
-        when(uut.getEntryPath()).thenReturn(Paths.get("stub"));
-        when(uut.read()).thenCallRealMethod();
+        final ProcfsReader uut = spy(new ProcfsReader(BASE, "stub"));
         when(uut.read(anyLong())).thenCallRealMethod();
         when(uut.readPath(any())).thenThrow(new IOException("THROW"));
 
@@ -91,17 +84,21 @@ public class ProcfsReaderUnit0Test {
     public void testCacheResultMissInitialAndSubsequent() throws IOException {
         final ProcfsReader uut = new ProcfsReader(BASE, "smaps-001.txt");
         final ProcfsReader spy = spy(uut);
+        when(spy.currentTime()).thenReturn(1000L);
 
-        ReadResult result = spy.read();
+        ReadResult result = spy.read(1000L + ProcfsReader.CACHE_DURATION_MS + 10);
 
-        assertTrue(result.isUpdated());
+        assertEquals(1000L, result.getReadTime());
+        assertEquals(1000L, spy.lastReadTime);
+        assertEquals(spy.lastReadTime, result.getReadTime());
 
-        spy.lastReadTime = 0;
-        result = spy.read(ProcfsReader.CACHE_DURATION_MS + 10);
+        when(spy.currentTime()).thenReturn(2000L);
 
-        // updated data and lastReadTime was updated?
-        assertTrue(result.isUpdated());
-        assertNotEquals(0, spy.lastReadTime);
+        result = spy.read(spy.lastReadTime + ProcfsReader.CACHE_DURATION_MS + 10);
+
+        assertEquals(2000L, result.getReadTime());
+        assertEquals(2000L, spy.lastReadTime);
+        assertEquals(spy.lastReadTime, result.getReadTime());
 
         verify(spy, times(2)).readPath(any());
         verify(spy, times(2)).cacheResult(any(), any());
@@ -111,17 +108,21 @@ public class ProcfsReaderUnit0Test {
     public void testCacheResultHit() throws IOException {
         final ProcfsReader uut = new ProcfsReader(BASE, "smaps-001.txt");
         final ProcfsReader spy = spy(uut);
+        when(spy.currentTime()).thenReturn(1000L);
 
         ReadResult result = spy.read();
 
-        assertTrue(result.isUpdated());
+        assertEquals(1000L, result.getReadTime());
+        assertEquals(1000L, spy.lastReadTime);
+        assertEquals(spy.lastReadTime, result.getReadTime());
 
-        spy.lastReadTime = 0;
-        result = spy.read(ProcfsReader.CACHE_DURATION_MS - 10);
+        when(spy.currentTime()).thenReturn(2000L);
 
-        // cached data and lastReadTime was not touched?
-        assertFalse(result.isUpdated());
-        assertEquals(0, spy.lastReadTime);
+        result = spy.read(spy.lastReadTime + ProcfsReader.CACHE_DURATION_MS - 10);
+
+        assertEquals(1000L, result.getReadTime());
+        assertEquals(1000L, spy.lastReadTime);
+        assertEquals(spy.lastReadTime, result.getReadTime());
 
         verify(spy).readPath(any());
         verify(spy).cacheResult(any(), any());
