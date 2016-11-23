@@ -32,6 +32,8 @@ abstract class ProcfsEntry {
 
     private final ProcfsReader reader;
 
+    private long lastHandle = -1;
+
     protected ProcfsEntry(ProcfsReader reader) {
         this.reader = Objects.requireNonNull(reader);
     }
@@ -40,9 +42,10 @@ abstract class ProcfsEntry {
         synchronized (lock) {
             try {
                 final ReadResult result = reader.read();
-                if (result != null && result.isUpdated()) {
+                if (result != null && (lastHandle == -1 || lastHandle != result.getReadTime())) {
                     reset();
                     handle(result.getLines());
+                    lastHandle = result.getReadTime();
                 }
             } catch (IOException e) {
                 reset();

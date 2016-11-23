@@ -69,7 +69,7 @@ class ProcfsReader {
     }
 
     /* default */ ReadResult read() throws IOException {
-        return read(System.currentTimeMillis());
+        return read(currentTime());
     }
 
     /* default */ ReadResult read(long currentTimeMillis) throws IOException {
@@ -80,10 +80,10 @@ class ProcfsReader {
             if (lastReadTime == -1 || lastReadTime + CACHE_DURATION_MS < currentTimeMillis) {
                 final List<String> lines = readPath(entryPath);
                 cacheResult(key, lines);
-                lastReadTime = System.currentTimeMillis();
-                readResult = new ReadResult(lines, true);
+                lastReadTime = currentTime();
+                readResult = new ReadResult(lines, lastReadTime);
             } else {
-                readResult = new ReadResult(data.get(key), false);
+                readResult = new ReadResult(data.get(key), lastReadTime);
             }
             return readResult;
         }
@@ -105,6 +105,10 @@ class ProcfsReader {
         data.put(key, lines);
     }
 
+    /* default */ long currentTime() {
+        return System.currentTimeMillis();
+    }
+
     /* default */ static ProcfsReader getInstance(String entry) {
         Objects.requireNonNull(entry);
 
@@ -122,15 +126,15 @@ class ProcfsReader {
 
         private final List<String> lines;
 
-        private final boolean updated;
+        private final long readTime;
 
-        /* default */ ReadResult(List<String> lines, boolean updated) {
+        /* default */ ReadResult(List<String> lines, long readTime) {
             this.lines = Objects.requireNonNull(lines);
-            this.updated = updated;
+            this.readTime = readTime;
         }
 
-        public boolean isUpdated() {
-            return updated;
+        public long getReadTime() {
+            return readTime;
         }
 
         public List<String> getLines() {

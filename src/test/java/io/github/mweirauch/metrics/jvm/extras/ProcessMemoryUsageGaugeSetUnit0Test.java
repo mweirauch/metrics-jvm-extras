@@ -34,14 +34,13 @@ import com.google.common.testing.NullPointerTester.Visibility;
 import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps;
 import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps.KEY;
 
-@SuppressWarnings("deprecation")
-public class NativeMemoryUsageGaugeSetUnit0Test {
+public class ProcessMemoryUsageGaugeSetUnit0Test {
 
     private final ProcfsSmaps smaps = mock(ProcfsSmaps.class);
 
     @Test
     public void testNullContract() {
-        final NativeMemoryUsageGaugeSet uut = new NativeMemoryUsageGaugeSet(smaps);
+        final ProcessMemoryUsageGaugeSet uut = new ProcessMemoryUsageGaugeSet(smaps);
 
         final NullPointerTester npt = new NullPointerTester();
 
@@ -53,7 +52,7 @@ public class NativeMemoryUsageGaugeSetUnit0Test {
     @SuppressWarnings("unused")
     @Test
     public void testInstantiation() {
-        new NativeMemoryUsageGaugeSet();
+        new ProcessMemoryUsageGaugeSet();
     }
 
     @SuppressWarnings("rawtypes")
@@ -65,7 +64,7 @@ public class NativeMemoryUsageGaugeSetUnit0Test {
         when(smaps.get(KEY.SWAP)).thenReturn(4L);
         when(smaps.get(KEY.SWAPPSS)).thenReturn(5L);
 
-        final NativeMemoryUsageGaugeSet uut = new NativeMemoryUsageGaugeSet(smaps);
+        final ProcessMemoryUsageGaugeSet uut = new ProcessMemoryUsageGaugeSet(smaps);
 
         final Map<String, Metric> metrics = uut.getMetrics();
 

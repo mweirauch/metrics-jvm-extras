@@ -88,7 +88,7 @@ public class ProcfsSmaps extends ProcfsEntry {
         Objects.requireNonNull(key);
 
         collect();
-        return Long.valueOf(values.get(Objects.requireNonNull(key)).longValue());
+        return Long.valueOf(values.get(key).longValue());
     }
 
     private void inc(KEY key, long increment) {
