@@ -24,19 +24,20 @@ A set of additional metrics complementing Dropwizards [metrics-jvm](https://gith
 ```
 
 ```java
-metrics.register("jvm.native", new NativeMemoryUsageGaugeSet());
-metrics.register("jvm.fds.count", new FileDescriptorCountGauge());
-metrics.register("jvm.uptime", new UptimeGauge());
+metrics.register("jvm.process.mem", new ProcessMemoryUsageGaugeSet());
+metrics.register("jvm.process.fds.count", new FileDescriptorCountGauge());
+metrics.register("jvm.process.uptime", new UptimeGauge());
 ```
 
 ## Available Metrics
 
-### NativeMemoryUsageGaugeSet
+### ProcessMemoryUsageGaugeSet
 
-The `NativeMemoryUsageGaugeSet` reads values from `/proc/self/smaps`.
+The `ProcessMemoryUsageGaugeSet` reads values from `/proc/self/smaps`.
+Please note that `procfs` is only available on Linux-based systems.
 
 * `vss`: Virtual set size. The amount of virtual memory the process can access.
-   Mostly useles, but included for completenes sake.
+   Mostly useles, but included for completeness sake.
 * `rss`: Resident set size. The amount of process memory currently in RAM.
 * `pss`: Proportional set size. The amount of process memory currently in RAM,
   accounting shared pages among processes. This metric is the most accurate in
@@ -45,6 +46,11 @@ The `NativeMemoryUsageGaugeSet` reads values from `/proc/self/smaps`.
 * `swappss`: The amount of process memory paged out to swap accounting for
   shared memory among processes. Since Linux 4.3. Will return `-1` if your
   kernel is older. As with `pss`, the most accurate metric to watch.
+
+### NativeMemoryUsageGaugeSet (deprecated)
+
+Deprecated in favour of `ProcessMemoryUsageGaugeSet`. Returns the very same
+values. Will be removed.
 
 ### FileDescriptorCountGauge
 

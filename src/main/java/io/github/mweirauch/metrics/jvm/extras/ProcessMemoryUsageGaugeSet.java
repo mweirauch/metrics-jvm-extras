@@ -27,20 +27,15 @@ import com.codahale.metrics.MetricSet;
 import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps;
 import io.github.mweirauch.metrics.jvm.extras.procfs.ProcfsSmaps.KEY;
 
-/**
- * @deprecated Use {@link ProcessMemoryUsageGaugeSet}
- *
- */
-@Deprecated
-public class NativeMemoryUsageGaugeSet implements MetricSet {
+public class ProcessMemoryUsageGaugeSet implements MetricSet {
 
     private final ProcfsSmaps smaps;
 
-    public NativeMemoryUsageGaugeSet() {
+    public ProcessMemoryUsageGaugeSet() {
         this.smaps = new ProcfsSmaps();
     }
 
-    /* default */ NativeMemoryUsageGaugeSet(ProcfsSmaps smaps) {
+    /* default */ ProcessMemoryUsageGaugeSet(ProcfsSmaps smaps) {
         this.smaps = Objects.requireNonNull(smaps);
     }
 
