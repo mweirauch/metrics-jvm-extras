@@ -40,7 +40,7 @@ Please note that `procfs` is only available on Linux-based systems.
    Mostly useles, but included for completeness sake.
 * `rss`: Resident set size. The amount of process memory currently in RAM.
 * `pss`: Proportional set size. The amount of process memory currently in RAM,
-  accounting shared pages among processes. This metric is the most accurate in
+  accounting for shared pages among processes. This metric is the most accurate in
   terms of "real" memory usage.
 * `swap`: The amount of process memory paged out to swap.
 * `swappss`: The amount of process memory paged out to swap accounting for
