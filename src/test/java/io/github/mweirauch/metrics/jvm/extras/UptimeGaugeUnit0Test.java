@@ -64,7 +64,6 @@ public class UptimeGaugeUnit0Test {
     @Test
     public void testGetValueReal() throws Exception {
         final UptimeGauge uut = new UptimeGauge(ManagementFactory.getRuntimeMXBean());
-        when(runtimeBean.getUptime()).thenReturn(Long.valueOf(1337));
 
         final Long value = uut.getValue();
 
