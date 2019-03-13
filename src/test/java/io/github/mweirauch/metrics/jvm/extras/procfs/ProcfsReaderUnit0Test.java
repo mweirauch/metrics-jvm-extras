@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 Michael Weirauch (michael.weirauch@gmail.com)
+ * Copyright © 2016-2019 Michael Weirauch (michael.weirauch@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public class ProcfsReaderUnit0Test {
 
     @BeforeClass
     public static void beforeClass() throws URISyntaxException {
-        BASE = Paths.get(Class.class.getResource("/procfs/").toURI());
+        BASE = Paths.get(ProcfsReaderUnit0Test.class.getResource("/procfs/").toURI());
     }
 
     @Test
