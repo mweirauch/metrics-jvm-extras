@@ -220,7 +220,13 @@
     <rule ref="rulesets/java/design.xml/UseNotifyAllInsteadOfNotify" />
     <rule ref="rulesets/java/design.xml/UseUtilityClass" />
     <rule ref="rulesets/java/design.xml/UseVarargs" />
-    <rule ref="rulesets/java/empty.xml/EmptyCatchBlock" />
+    <rule ref="rulesets/java/empty.xml/EmptyCatchBlock">
+        <properties>
+            <property name="allowCommentedBlocks">
+                <value>true</value>
+            </property>
+        </properties>
+    </rule>
     <rule ref="rulesets/java/empty.xml/EmptyFinallyBlock" />
     <rule ref="rulesets/java/empty.xml/EmptyIfStmt" />
     <rule ref="rulesets/java/empty.xml/EmptyInitializer" />
@@ -334,7 +340,13 @@
     <rule ref="rulesets/java/naming.xml/BooleanGetMethodName" />
     <rule ref="rulesets/java/naming.xml/ClassNamingConventions" />
     <rule ref="rulesets/java/naming.xml/GenericsNaming" />
-    <rule ref="rulesets/java/naming.xml/LongVariable" />
+    <rule ref="rulesets/java/naming.xml/LongVariable">
+        <properties>
+            <property name="minimum">
+                <value>20</value>
+            </property>
+        </properties>
+    </rule>
     <rule ref="rulesets/java/naming.xml/MethodNamingConventions" />
     <rule ref="rulesets/java/naming.xml/MethodWithSameNameAsEnclosingClass" />
     <rule ref="rulesets/java/naming.xml/MisleadingVariableName" />

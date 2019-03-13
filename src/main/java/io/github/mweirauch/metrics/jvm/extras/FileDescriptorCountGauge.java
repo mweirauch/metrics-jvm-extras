@@ -19,13 +19,22 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import com.codahale.metrics.Gauge;
 
 public class FileDescriptorCountGauge implements Gauge<Long> {
 
+    private static final List<String> OS_BEAN_CLASS_NAMES = Arrays.asList(
+            "com.sun.management.UnixOperatingSystemMXBean", // HotSpot
+            "com.ibm.lang.management.UnixOperatingSystemMXBean" // J9
+    );
+
     private final OperatingSystemMXBean osBean;
+
+    private final Class<?> osBeanClass;
 
     public FileDescriptorCountGauge() {
         this(ManagementFactory.getOperatingSystemMXBean());
@@ -33,18 +42,34 @@ public class FileDescriptorCountGauge implements Gauge<Long> {
 
     /* default */ FileDescriptorCountGauge(OperatingSystemMXBean osBean) {
         this.osBean = Objects.requireNonNull(osBean);
+        this.osBeanClass = detectClass(OS_BEAN_CLASS_NAMES);
     }
 
     @Override
     public Long getValue() {
-        try {
-            final Method method = osBean.getClass().getMethod("getOpenFileDescriptorCount");
-            method.setAccessible(true);
-            return (Long) method.invoke(osBean);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException e) {
+        if (osBeanClass == null) {
             return Long.valueOf(-1);
         }
+
+        try {
+            final Method method = osBeanClass.getMethod("getOpenFileDescriptorCount");
+            osBeanClass.cast(osBean);
+            return (Long) method.invoke(osBean);
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException | ClassCastException e) {
+            return Long.valueOf(-1);
+        }
+    }
+
+    private static Class<?> detectClass(List<String> classNames) {
+        for (final String className : classNames) {
+            try {
+                return Class.forName(className);
+            } catch (ClassNotFoundException ignore) {
+                // ignore
+            }
+        }
+        return null;
     }
 
 }

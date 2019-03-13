@@ -32,7 +32,7 @@ import com.google.common.testing.NullPointerTester.Visibility;
 
 public class FileDescriptorCountGaugeUnit0Test {
 
-    private final OperatingSystemMXBean osBean = new DummyOperatingSystemMXBean();
+    private final OperatingSystemMXBean unsupportedOsBean = new DummyOperatingSystemMXBean();
 
     private static class DummyOperatingSystemMXBean implements OperatingSystemMXBean {
 
@@ -80,7 +80,7 @@ public class FileDescriptorCountGaugeUnit0Test {
 
     @Test
     public void testNullContract() {
-        final FileDescriptorCountGauge uut = new FileDescriptorCountGauge(osBean);
+        final FileDescriptorCountGauge uut = new FileDescriptorCountGauge(unsupportedOsBean);
 
         final NullPointerTester npt = new NullPointerTester();
 
@@ -97,12 +97,16 @@ public class FileDescriptorCountGaugeUnit0Test {
 
     @Test
     public void testGetValue() throws Exception {
-        final FileDescriptorCountGauge uut = new FileDescriptorCountGauge(osBean);
+        final FileDescriptorCountGauge uut = new FileDescriptorCountGauge(unsupportedOsBean);
 
         final Long value = uut.getValue();
 
+        /*
+         * We can't get the dummy value of 512 because the os bean in use for
+         * this test is unsupported.
+         */
         assertNotNull(value);
-        assertEquals(Long.valueOf(512), value);
+        assertEquals(Long.valueOf(-1), value);
     }
 
     @SuppressWarnings("restriction")
